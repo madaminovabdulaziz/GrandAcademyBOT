@@ -78,15 +78,13 @@ async def checker(call: CallbackQuery, state: FSMContext):
             await call.message.answer(f"""
 
 😊<b>Hurmatli foydalanuvchi!</b>
-Kanalimiz obunachilari safida bo'lganingizdan minnatdormiz.
-
-Minnatdormiz!
+Kanalimiz obunachilari safida bo'lganingizdan minnatdormiz!
             """)
             await call.message.answer("""
 <b>☑️ Ro'yxatdan o'ting!</b>
 ----------------------------
 
-Iltimos, ism, familiyangizni kiriting::\n\nMisol: <b>Aziz Azizov</b>""", reply_markup=ReplyKeyboardRemove())
+Iltimos, ism, familiyangizni kiriting:\n\nMisol: <b>Aziz Azizov</b>""", reply_markup=ReplyKeyboardRemove())
             await state.set_state("not_user")
 
         else:
