@@ -151,3 +151,21 @@ async def define_them(message: Message, state: FSMContext):
     else:
         await message.answer("TEST ID xato kiritilgan!\n Iltimos, qayta kiriting!", reply_markup=ReplyKeyboardRemove())
         return
+    
+@dp.message_handler(text="/deleteuser", chat_id=ADMINS, state="*")
+async def deleteUserDB(message: Message, state: FSMContext):
+        await message.answer("UserID kiriting:")
+        await state.set_state("getUID")
+
+
+@dp.message_handler(state="getUID")
+async def aha(message: Message, state: FSMContext):
+    user_id = message.text
+    if user_id.isdigit():
+        try:
+            await db.delete_user_by_id(user_id)
+        except:
+            pass
+    else:
+        await message.answer("Iltimos, qayta kiriting!")
+        return
