@@ -117,13 +117,16 @@ async def get_user_phone(message: Message, state: FSMContext):
 
 @dp.message_handler(text=roles_list, state="role")
 async def check_role(message: Message, state: FSMContext):
+    pm_rolwe = 'p_school'
+    a_role = 'abitur'
+    r_role = 'random'
     role = message.text
     if role == roles_list[0]:
-        await db.update_role("p_school", message.from_user.id)
+        await db.update_role(pm_rolwe, message.from_user.id)
     elif role == roles_list[1]:
-        await db.update_role("abitur", message.from_user.id)
+        await db.update_role(a_role, message.from_user.id)
     elif role == roles_list[2]:
-        await db.update_role("random", message.from_user.id)
+        await db.update_role(r_role, message.from_user.id)
     else:
         await message.answer("Xatolik!\nQayta kiriting!", reply_markup=role_mrkp)
         return
