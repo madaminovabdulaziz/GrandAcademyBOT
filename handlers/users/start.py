@@ -112,6 +112,14 @@ async def get_user_phone(message: Message, state: FSMContext):
         if len(number) == 9:
             number = str(number)
             await db.update_user_phone(message.from_user.id, number)
+            try:
+                user = await db.add_user(telegram_id=message.from_user.id,
+                                 full_name=message.from_user.full_name,
+                                 username=message.from_user.username,
+                                 )
+
+            except asyncpg.exceptions.UniqueViolationError:
+                pass
             await message.answer("Siz ro'yxatdan o'tdingiz!")
             await message.answer("🏡 Bosh menyu:", reply_markup=main_menu)
             await Main.main_menu.set()
