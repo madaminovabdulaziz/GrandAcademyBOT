@@ -5,7 +5,7 @@ main_menu = ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton(text="➕ Test qo'shish"),
-            KeyboardButton(text="✅ Test tekshirish")
+            KeyboardButton(text="🔑 Test tekshirish")
         ],
 
         [
