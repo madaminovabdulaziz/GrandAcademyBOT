@@ -101,46 +101,32 @@ Iltimos, ism, familiyangizni kiriting:\n\nMisol: <b>Aziz Azizov</b>""", reply_ma
 async def get_name(message: types.Message, state: FSMContext):
     ism = str(message.text)
     await db.update_user_name(message.from_user.id, ism)
-    await message.answer("Telefon raqamingizni yuboring!", reply_markup=phone_btn)
+    await message.answer("Telefon raqamingizni +998 ** ******* formatida yuboring!\n\nMisol 901234567")
     await state.set_state("phone")
 
 
-@dp.message_handler(state="phone", content_types=types.ContentType.CONTACT)
+@dp.message_handler(state="phone")
 async def get_user_phone(message: Message, state: FSMContext):
-    number = message.contact.phone_number
-    number = str(number)
-    await db.update_user_phone(message.from_user.id, number)
-    await message.answer("Tanlang ⬇️", reply_markup=role_mrkp)
-    await state.set_state("role")
-
-
-
-@dp.message_handler(text=roles_list, state="role")
-async def check_role(message: Message, state: FSMContext):
-    pm_rolwe = 'p_school'
-    a_role = 'abitur'
-    r_role = 'random'
-    role = message.text
-    if role == roles_list[0]:
-        await db.update_role(pm_rolwe, message.from_user.id)
-    elif role == roles_list[1]:
-        await db.update_role(a_role, message.from_user.id)
-    elif role == roles_list[2]:
-        await db.update_role(r_role, message.from_user.id)
+    number = message.text
+    if number.isdigit():
+        if len(number) == 9:
+            number = str(number)
+            await db.update_user_phone(message.from_user.id, number)
+            await message.answer("Siz ro'yxatdan o'tdingiz!")
+            await message.answer("🏡 Bosh menyu:", reply_markup=main_menu)
+            await Main.main_menu.set()
+        else:
+            await message.answer("Telefon raqamingizni +998 ** ******* formatida yuboring!\n\nMisol 901234567")
+            return
     else:
-        await message.answer("Xatolik!\nQayta kiriting!", reply_markup=role_mrkp)
-        return
-    try:
-        user = await db.add_user(telegram_id=message.from_user.id,
-                                 full_name=message.from_user.full_name,
-                                 username=message.from_user.username,
-                                 )
+         await message.answer("Telefon raqamingizni +998 ** ******* formatida yuboring!\n\nMisol 901234567")
+         return
+        
+            
+        
 
-    except asyncpg.exceptions.UniqueViolationError:
-        pass
-    await message.answer("Siz ro'yxatdan o'tdingiz!")
-    await message.answer("🏡 Bosh menyu:", reply_markup=main_menu)
-    await Main.main_menu.set()
+
+
 
 @dp.callback_query_handler(text="check", state=Main.sbs)
 async def checker(call: CallbackQuery, state: FSMContext):
