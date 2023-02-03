@@ -11,7 +11,7 @@ from .texts import javob_tekshirish, after_test_high, after_test_low, after_test
     after_test_lowA, after_test_highA
 
 
-@dp.message_handler(text="✅ Test tekshirish", state=Main.main_menu)
+@dp.message_handler(text="🔑 Test tekshirish", state=Main.main_menu)
 async def check_fstep(message: Message, state: FSMContext):
 
     home_btn = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
