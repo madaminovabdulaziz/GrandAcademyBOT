@@ -23,6 +23,14 @@ roles_list = ["Prezident maktab o'quvchisi", "Abiturient", "Bulardan hech biri e
 async def bot_start(message: Message, state: FSMContext):
     is_User = await db.select_user(message.from_user.id)
     if is_User is None:
+        try:
+            user = await db.add_user(telegram_id=message.from_user.id,
+                                                 full_name=message.from_user.full_name,
+                                                 username=message.from_user.username,
+                                                 )
+
+        except asyncpg.exceptions.UniqueViolationError:
+            pass
         channels_format = str()
         for channel in CHANNELS:
             chat = await bot.get_chat(channel)
