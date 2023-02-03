@@ -21,7 +21,7 @@ class BigBrother(BaseMiddleware):
         else:
             return
 
-        result = "Botdan foydalanish uchun quyidagi kanallarga obuna bo'ling:\n"
+        result = "Botdan foydalanish uchun quyidagi kanalga <b>obuna</b> bo'ling:\n"
         final_status = True
         for channel in CHANNELS:
             status = await subscription.check(user_id=user,
@@ -30,7 +30,7 @@ class BigBrother(BaseMiddleware):
             channel = await bot.get_chat(channel)
             if not status:
                 invite_link = await channel.export_invite_link()
-                result += (f"👉 <a href='{invite_link}'>{channel.title}</a>\n")
+                result += (f"👉 <b><a href='{invite_link}'>{channel.title}</a></b>\n")
 
         if not final_status:
             await update.message.answer(result, disable_web_page_preview=True)
