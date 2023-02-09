@@ -6,7 +6,7 @@ from loader import dp, db
 from aiogram.dispatcher import FSMContext
 from states.main_state import Main
 from datetime import date, datetime
-import pytz
+from pytz import timezone
 from .texts import javob_tekshirish, after_test_high, after_test_low, after_test_lowPM, after_test_highPM, \
     after_test_lowA, after_test_highA
 
@@ -85,7 +85,7 @@ Test kodini noto`g`ri yuborgan bo`lishingiz mumkin, iltimos tekshirib qaytadan y
                             percent = userAnswers / questionLength * 100
                             percent = round(percent)
                             time_format = '%Y-%m-%d %H:%M:%S'
-                            formatted_now = datetime.now().strftime(time_format)
+                            formatted_now = datetime.now(timezone('Asia/Tashkent')).strftime(time_format)
                             if percent < 80:
                                 await message.answer(
                                     after_test_low(message.from_user.username, name, subject, test_code, questionLength,
@@ -161,7 +161,7 @@ Test kodini noto`g`ri yuborgan bo`lishingiz mumkin, iltimos tekshirib qaytadan y
                             userAnswers = len(correct_answer) - overall_erros
 
                             time_format = '%Y-%m-%d %H:%M:%S'
-                            formatted_now = datetime.now().strftime(time_format)
+                            formatted_now = datetime.now(timezone('Asia/Tashkent')).strftime(time_format)
                             if overall_ball < 80:
                                 await message.answer(
                                     after_test_lowPM(message.from_user.username, name, subject, test_code,
@@ -266,7 +266,7 @@ Test kodini noto`g`ri yuborgan bo`lishingiz mumkin, iltimos tekshirib qaytadan y
                             userAnswers = len(correct_answer) - overall_erros
 
                             time_format = '%Y-%m-%d %H:%M:%S'
-                            formatted_now = datetime.now().strftime(time_format)
+                            formatted_now = datetime.now(timezone('Asia/Tashkent')).strftime(time_format)
                             if overall_ball < 160:
                                 await message.answer(
                                     after_test_lowA(message.from_user.username, name, subject, test_code,
