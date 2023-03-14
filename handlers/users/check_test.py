@@ -44,16 +44,8 @@ async def check_sstep(message: Message, state: FSMContext):
             where_is_star -= 1
             test_id = full_answer[:where_is_star]
 
-            is_test_yes = await db.get_test_by_id(test_id)
-            if is_test_yes is None:
-                await message.answer("""
-🤷‍♂️ <b>Afsus! Test bazadan topilmadi!</b>
-Test kodini noto`g`ri yuborgan bo`lishingiz mumkin, iltimos tekshirib qaytadan yuboring.
-                    """)
-                await message.answer("🏡 Bosh menyu", reply_markup=main_menu)
-                await Main.main_menu.set()
-
-            else:
+            is_test_yes = await db.get_test_by_id(test_id)   
+            if is_test_yes:
                 test_id = int(test_id)
                 test_type = await db.get_test_type(test_id)
                 if test_type == "usual":
@@ -312,3 +304,10 @@ Test kodini noto`g`ri yuborgan bo`lishingiz mumkin, iltimos tekshirib qaytadan y
                         await message.answer("Siz bu testni avval yechgansiz! Qayta javob berish mumkun emas!")
                         await message.answer("🏡 Bosh menyu", reply_markup=main_menu)
                         await Main.main_menu.set()
+            else:
+                await message.answer("""
+                🤷‍♂️ <b>Afsus! Test bazadan topilmadi!</b>
+                Test kodini noto`g`ri yuborgan bo`lishingiz mumkin, iltimos tekshirib qaytadan yuboring.
+                                    """)
+                await message.answer("🏡 Bosh menyu", reply_markup=main_menu)
+                await Main.main_menu.set()                       
