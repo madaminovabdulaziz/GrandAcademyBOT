@@ -71,26 +71,52 @@ async def check_sstep(message: Message, state: FSMContext):
 
                             name = await db.getUser_name(message.from_user.id)
                             subject = await db.get_test_name(test_id)
+                            user_id = str(message.from_user.id)
                             test_code = test_id
                             questionLength = len(correct_answer)
                             userAnswers = len(correct_answer) - errors
                             percent = userAnswers / questionLength * 100
                             percent = round(percent)
                             time_format = '%Y-%m-%d %H:%M:%S'
+                            test_id = str(test_id)
                             formatted_now = datetime.now(timezone('Asia/Tashkent')).strftime(time_format)
+                            await db.add_rating(test_id, user_id, name, percent, str(formatted_now), "usual")
                             if percent < 80:
                                 await message.answer(
                                     after_test_low(message.from_user.username, name, subject, test_code, questionLength,
                                                    userAnswers, percent, formatted_now),
                                     disable_web_page_preview=True)
-                                # rating
+                                rating = await db.show_rating_by_user(test_id)
+                                show_rating = f"📕 Fan: <b>{subject}</b>\n🎛 Test kodi: <b>{test_id}</b>\n\n{test_id}-kodli test bo'yicha REYTING⬇️\n\n"
+                                i = 1
+                                for user in rating:
+                                    show_rating += "{0}) {1} - {2} foiz\n".format(i, user['full_name'], user['ball'])
+                                    i += 1
+
+                                show_rating += "\n\n<b>Reyting har 5-10 daqiqada yangilanadi!</b>"
+                                show_rating += "\nBosh menyu -> Reyting ko'rish tugmalari orqali reytingni qayta tekshirishni unutmang!"
+
+                                await message.answer(show_rating, reply_markup=main_menu)
+                                await Main.main_menu.set()
                             elif 80 <= percent <= 100:
                                 await message.answer(
                                     after_test_high(message.from_user.username, name, subject, test_code,
                                                     questionLength,
                                                     userAnswers, percent, formatted_now),
                                     disable_web_page_preview=True)
-                                # rating
+                                rating = await db.show_rating_by_user(test_id)
+                                show_rating = f"📕 Fan: <b>{subject}</b>\n🎛 Test kodi: <b>{test_id}</b>\n\n{test_id}-kodli test bo'yicha REYTING⬇️\n\n"
+                                i = 1
+                                for user in rating:
+                                    show_rating += "{0}) {1} - {2} foiz\n".format(i, user['full_name'], user['ball'])
+                                    i += 1
+
+                                show_rating += "\n\n<b>Reyting har 5-10 daqiqada yangilanadi!</b>"
+                                show_rating += "\nBosh menyu -> Reyting ko'rish tugmalari orqali reytingni qayta tekshirishni unutmang!"
+
+                                await message.answer(show_rating, reply_markup=main_menu)
+                                await Main.main_menu.set()
+                                await message.answer(show_rating)
 
                         else:
                             await message.answer(f"❗️ <b>{test_id}</b>-sonli testning {len1}-ta savoli mavjud!\n\n"
