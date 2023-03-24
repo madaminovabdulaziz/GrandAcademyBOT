@@ -273,7 +273,7 @@ class Database:
 
     async def show_rating_by_user(self, test_id):
         sql = f"""
-        SELECT full_name, ball FROM Rating WHERE test_id='{test_id}' ORDER BY ball DESC LIMIT 20
+        SELECT full_name, ball FROM Rating WHERE test_id='{test_id}' ORDER BY ball
         """
         return await self.execute(sql, fetch=True)
 
