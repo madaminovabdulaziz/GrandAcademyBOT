@@ -107,7 +107,6 @@ async def check_sstep(message: Message, state: FSMContext):
                                     disable_web_page_preview=True)
                                 await message.answer(show_rating, reply_markup=main_menu)
                                 await Main.main_menu.set()
-                                await message.answer(show_rating)
 
                         else:
                             await message.answer(f"❗️ <b>{test_id}</b>-sonli testning {len1}-ta savoli mavjud!\n\n"
