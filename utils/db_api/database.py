@@ -258,7 +258,7 @@ class Database:
         user_id VARCHAR (255),
         full_name VARCHAR (255),
         ball FLOAT,
-        created_time VARCHAR (255),
+        created_time timestamp,
         type VARCHAR (255)
         );
         """
