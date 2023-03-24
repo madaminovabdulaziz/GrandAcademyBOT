@@ -24,7 +24,7 @@ async def showF(message: Message, state: FSMContext):
         show_rating = f"📕 Fan: <b>{subject}</b>\n🎛 Test kodi: <b>{test_id}</b>\n\n{test_id}-kodli test bo'yicha REYTING⬇️\n\n"
         i = 1
         for user in rating:
-            show_rating += "{0}) {1} - {2} ball\n".format(i, user['full_name'], user['ball'])
+            show_rating += "{0}) {1} - {2} ball, {3}\n".format(i, user['full_name'], user['ball'], user['created_time'])
             i += 1
 
         await message.answer(show_rating)
