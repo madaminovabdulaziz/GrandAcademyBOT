@@ -80,7 +80,7 @@ async def check_sstep(message: Message, state: FSMContext):
                             time_format = '%Y-%m-%d %H:%M:%S'
                             test_id = str(test_id)
                             formatted_now = datetime.now(timezone('Asia/Tashkent')).strftime(time_format)
-                            await db.add_rating(test_id, user_id, name, percent, str(formatted_now), "usual")
+                            await db.add_rating(test_id, user_id, name, percent, formatted_now, "usual")
                             rating = await db.show_rating_by_user(test_id)
                             show_rating = f"📕 Fan: <b>{subject}</b>\n🎛 Test kodi: <b>{test_id}</b>\n\n{test_id}-kodli test bo'yicha REYTING⬇️\n\n"
                             i = 1
@@ -189,7 +189,7 @@ async def check_sstep(message: Message, state: FSMContext):
                             name = await db.getUser_name(user_id)
                             user_id = str(user_id)
                             test_id = str(test_id)
-                            await db.add_rating(test_id, user_id, name, overall_ball, str(formatted_now), "specialPM")
+                            await db.add_rating(test_id, user_id, name, overall_ball, formatted_now, "specialPM")
                             rating = await db.show_rating_by_user(test_id)
                             show_rating = f"📕 Fan: <b>{subject}</b>\n🎛 Test kodi: <b>{test_id}</b>\n\n{test_id}-kodli test bo'yicha REYTING⬇️\n\n"
                             i = 1
@@ -295,7 +295,7 @@ async def check_sstep(message: Message, state: FSMContext):
                             name = await db.getUser_name(user_id)
                             user_id = str(user_id)
                             test_id = str(test_id)
-                            await db.add_rating(test_id, user_id, name, overall_ball, str(formatted_now), "specialA")
+                            await db.add_rating(test_id, user_id, name, overall_ball, formatted_now, "specialA")
                             rating = await db.show_rating_by_user(test_id)
                             show_rating = f"📕 Fan: <b>{subject}</b>\n🎛 Test kodi: <b>{test_id}</b>\n\n{test_id}-kodli test bo'yicha REYTING⬇️\n\n"
                             i = 1
