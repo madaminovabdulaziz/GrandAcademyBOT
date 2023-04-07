@@ -90,7 +90,7 @@ async def check_sstep(message: Message, state: FSMContext):
 
                             show_rating += "\n\n<b>Reyting har 5-10 daqiqada yangilanadi!</b>"
                             show_rating += "\nBosh menyu -> Reyting ko'rish tugmalari orqali reytingni qayta tekshirishni unutmang!"
-
+                            show_rating += "🤖 Bot Abdulaziz Madaminov (@abdulaziz_madaminov) tomonidan tayyorlandi."
                             if percent < 80:
                                 await message.answer(
                                     after_test_low(message.from_user.username, name, subject, test_code, questionLength,
@@ -196,6 +196,8 @@ async def check_sstep(message: Message, state: FSMContext):
                             for user in rating:
                                 show_rating += "{0}) {1} - {2} ball \n".format(i, user['full_name'], user['ball'])
                                 i += 1
+                                
+                            show_rating += "🤖 Bot Abdulaziz Madaminov (@abdulaziz_madaminov) tomonidan tayyorlandi."
 
                             await message.answer(show_rating)
                             await message.answer("🏡 Bosh menyu", reply_markup=main_menu)
@@ -302,7 +304,9 @@ async def check_sstep(message: Message, state: FSMContext):
                             for user in rating:
                                 show_rating += "{0}) {1} - {2} ball\n".format(i, user['full_name'], user['ball'])
                                 i += 1
-
+                            
+                            
+                            show_rating += "🤖 Bot Abdulaziz Madaminov (@abdulaziz_madaminov) tomonidan tayyorlandi."
                             await message.answer(show_rating)
                             await message.answer("🏡 Bosh menyu", reply_markup=main_menu)
                             await Main.main_menu.set()
