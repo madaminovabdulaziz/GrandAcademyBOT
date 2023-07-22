@@ -97,6 +97,11 @@ class Database:
         sql = f"SELECT full_name FROM Users WHERE telegram_id='{telegram_id}'"
         return await self.execute(sql, fetchval=True)
 
+    async def get_all_users(self):
+        sql = f"SELECT * FROM Users"
+        return await self.execute(sql, fetch=True)
+        
+
     async def get_all_names(self):
         sql = f"SELECT full_name FROM Users"
         return await self.execute(sql, execute=True)
