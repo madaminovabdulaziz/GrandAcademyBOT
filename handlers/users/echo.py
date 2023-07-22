@@ -16,7 +16,7 @@ async def bot_echo(message: types.Message):
     max_message_length = 4096  # Adjust this value based on the maximum message length allowed by your messaging platform
 
     for user in users:
-        data += "{0}) {1} - {2} - {3} - {4} - {5}\n".format(i, user['id'], user['full_name'], user['username'],
+        data += "{0}) {1} - {2} - @{3} - {4} - <b>☎️ Tel: </b>{5}\n".format(i, user['id'], user['full_name'], user['username'],
                                                             user['telegram_id'], user['phone'])
         i += 1
 
