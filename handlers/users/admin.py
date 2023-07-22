@@ -14,6 +14,7 @@ admin_btn = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
 admin_btn.add("Block test qo'shish")
 admin_btn.add("Test bo'yicha reytingni ko'rish")
 admin_btn.add("Foydalanuvchilar sonini ko'rish")
+admin_btn.add("Foydalanuvchilarni ko'rish")
 admin_btn.add("🔙 Orqaga")
 
 
@@ -22,7 +23,7 @@ user_types_btn.add("PM o'quvchilariga")
 user_types_btn.add("Abiturientlarga")
 user_types_btn.add("🔙 Orqaga")
 
-this_btn = ["Block test qo'shish", "Test bo'yicha reytingni ko'rish", "🔙 Orqaga", "Foydalanuvchilar sonini ko'rish"]
+this_btn = ["Block test qo'shish", "Test bo'yicha reytingni ko'rish", "🔙 Orqaga", "Foydalanuvchilar sonini ko'rish", "Foydalanuvchilarni ko'rish"]
 this_btn_2 = ["PM o'quvchilariga", "Abiturientlarga", "🔙 Orqaga"]
 
 @dp.message_handler(text="/admin", chat_id=ADMINS, state="*")
@@ -47,8 +48,20 @@ async def make_d(message: Message, state: FSMContext):
 Ayni payt botdan {users} kishi ro'yxatdan o'tgan
 
 """)
-        await message.answer("🏡 Bosh menyu", reply_markup=main_menu)
-        await Main.main_menu.set()
+    elif message.text == this_btn[4]:
+        users = await db.get_all_users()
+
+        i = 1
+        data = "<b>BARCHA FOYDALUVCHILAR\n\n\n</b>"
+        for user in users:
+
+            data += "{0}) {1} - {2} - {3} - {4} - {5}\n".format(i, user['id'], user['full_name'], user['username'], user['telegram_id'], user['phone'])
+            i += 1
+
+        await message.answer(data)
+
+    await message.answer("🏡 Bosh menyu", reply_markup=main_menu)
+    await Main.main_menu.set()
 
 
 
