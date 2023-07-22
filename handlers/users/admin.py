@@ -53,12 +53,22 @@ Ayni payt botdan {users} kishi ro'yxatdan o'tgan
 
         i = 1
         data = "<b>BARCHA FOYDALUVCHILAR\n\n\n</b>"
-        for user in users:
+        max_message_length = 4096  # Adjust this value based on the maximum message length allowed by your messaging platform
 
+        for user in users:
             data += "{0}) {1} - {2} - {3} - {4} - {5}\n".format(i, user['id'], user['full_name'], user['username'], user['telegram_id'], user['phone'])
             i += 1
 
-        await message.answer(data)
+    # Check if the current data length exceeds the maximum message length
+            if len(data) >= max_message_length:
+        # If the length is too long, send the current data and reset it for the next chunk
+                await message.answer(data)
+                data = "<b>BARCHA FOYDALUVCHILAR\n\n\n</b>"
+
+# Send any remaining data (last chunk) if there's anything left
+        if len(data) > len("<b>BARCHA FOYDALUVCHILAR\n\n\n</b>"):
+            await message.answer(data)
+
 
     await message.answer("🏡 Bosh menyu", reply_markup=main_menu)
     await Main.main_menu.set()
