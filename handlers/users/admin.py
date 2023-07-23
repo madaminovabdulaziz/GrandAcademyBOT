@@ -1,6 +1,7 @@
 import re
 import random
 
+from aiogram import types
 from aiogram.types import Message, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from aiogram.dispatcher import FSMContext
 
@@ -190,8 +191,9 @@ async def get_class(message: Message, state: FSMContext):
             await state.update_data(
                 {"class": sinf}
             )
-            await message.answer(qoshish_yoriqnomasi(), reply_markup=home_btn)
-            await state.set_state("second_sec")
+            await message.answer("Test rasmnini yuklang: ")
+            await state.set_state("get_test_photo")
+
         else:
             await message.answer("Sinflar faqat 1-11 gacha!\n\nQayta kirting!")
             return
@@ -201,6 +203,21 @@ async def get_class(message: Message, state: FSMContext):
         return
 
 
+
+@dp.message_handler(content_types=types.ContentTypes.PHOTO, state="get_test_photo")
+async def handle_photo(message: types.Message, state: FSMContext):
+    home_btn = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+    home_btn.add("🏡 Bosh menyu")
+    # Save the photo to a file
+    photo = message.photo[-1]  # Get the largest available photo
+    photo_path = f"photos/{photo.file_id}.jpg"  # Path to save the photo
+    await photo.download(destination_file=photo_path)
+    await message.answer(qoshish_yoriqnomasi(), reply_markup=home_btn)
+    await state.set_state("second_sec")
+
+    await state.update_data(
+        {"photo": photo_path}
+    )
 
 
 @dp.message_handler(state="second_sec")
@@ -232,10 +249,13 @@ async def sstep(message: Message, state: FSMContext):
             await message.answer(bazaga_qoshildi(test_id, user_answers))
             data = await state.get_data()
             sinf = data.get("class")
+            photo = data.get('photo')
+            print(photo)
             link = f"https://t.me/grandacademybot?start=class_{sinf}_{test_id}"
             await message.answer(f"Bu test uchun link:\n\n{link}", disable_web_page_preview=True)
             await message.answer("🏡 Bosh menyu", reply_markup=main_menu)
             await Main.main_menu.set()
+            await db.add_photo(test_id, photo)
 
         else:
             await message.answer(qoshish_yoriqnomasi(), reply_markup=ReplyKeyboardRemove())
