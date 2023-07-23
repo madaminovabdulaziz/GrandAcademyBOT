@@ -210,7 +210,7 @@ async def handle_photo(message: types.Message, state: FSMContext):
     home_btn.add("🏡 Bosh menyu")
     # Save the photo to a file
     photo = message.photo[-1]  # Get the largest available photo
-    photo_path = f"photos/{photo.file_id}.jpg"  # Path to save the photo
+    photo_path = f"rasmlar/{photo.file_id}.jpg"  # Path to save the photo
     await photo.download(destination_file=photo_path)
     await message.answer(qoshish_yoriqnomasi(), reply_markup=home_btn)
     await state.set_state("second_sec")
