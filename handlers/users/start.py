@@ -73,16 +73,16 @@ async def bot_start(message: Message, state: FSMContext):
                         test_id = payload.split('_')[2]
                         test_len = await db.get_test_length(test_id)
                         text = f"""
-    ✅ Test boshlandi.
+✅ Test boshlandi.
 
-    📔 Sinf: {class_name}
-    🔑 Test kodi: {test_id}
-    📝 Savollar soni: {test_len}
+📔 Sinf: {class_name}
+🔑 Test kodi: {test_id}
+📝 Savollar soni: {test_len}
 
-    Javobingizni quyidagi ko'rinishda yuborishingiz mumkin:
-    {test_id}*abcdabcd...
-    yoki
-    {test_id}*1a2b3c4d5a...
+Javobingizni quyidagi ko'rinishda yuborishingiz mumkin:
+{test_id}*abcdabcd...
+yoki
+{test_id}*1a2b3c4d5a...
 
                         """
                         await message.answer(text, reply_markup=ReplyKeyboardRemove())
