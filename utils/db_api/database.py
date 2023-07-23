@@ -290,6 +290,34 @@ class Database:
     async def delete_table_rating(self):
         await self.execute("DROP TABLE Rating", execute=True)
 
+
+
+    async def create_table_test_photos(self):
+        sql = """
+    CREATE TABLE IF NOT EXISTS TPhotos (
+    id SERIAL PRIMARY KEY,
+    test_id BIGINT, 
+    photo_path VARCHAR(255)
+    );
+    """
+        await self.execute(sql, execute=True)
+
+
+
+    async def add_photo(self, test_id, photo_path):
+        sql = """
+    INSERT INTO TPhotos (test_id, photo_path) VALUES ($1, $2) returning *
+    """
+        return await self.execute(sql, test_id, photo_path, fetchrow=True)
+
+
+    async def get_photo_by_id(self, test_id):
+        sql = f"""
+    SELECT photo_path from TPhotos WHERE test_id='{test_id}'
+    """
+        return await self.execute(sql, fetchval=True)
+
+
 #################################
 
 
