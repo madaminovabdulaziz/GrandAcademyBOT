@@ -21,6 +21,7 @@ async def on_startup(dispatcher):
     await db.create_table_users()
     await db.create_table_done_test()
     await db.create_table_rating()
+    await db.create_table_test_photos()
 
     # Bot ishga tushgani haqida adminga xabar berish
     await on_startup_notify(dispatcher)
