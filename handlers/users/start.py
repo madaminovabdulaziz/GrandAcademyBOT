@@ -85,7 +85,14 @@ yoki
 {test_id}*1a2b3c4d5a...
 
                         """
-                        await message.answer(text, reply_markup=ReplyKeyboardRemove())
+                        photo = await db.get_photo_by_id(test_id)
+                        file_id = photo.split('/')[-1].split('.')[0]
+                        await bot.send_photo(
+                            chat_id=message.chat.id,
+                            photo=file_id,
+                            caption=text,
+                            reply_markup=ReplyKeyboardRemove()
+                        )
                         await state.set_state("next_step1")
                     else:
                         await message.answer("🏡 Bosh menyu", reply_markup=main_menu)
@@ -180,7 +187,14 @@ Javobingizni quyidagi ko'rinishda yuborishingiz mumkin:
 yoki
 {test_id}*1a2b3c4d5a...
  """
-            await message.answer(text, reply_markup=ReplyKeyboardRemove())
+            photo = await db.get_photo_by_id(test_id)
+            file_id = photo.split('/')[-1].split('.')[0]
+            await bot.send_photo(
+                chat_id=message.chat.id,
+                photo=file_id,
+                caption=text,
+                reply_markup=ReplyKeyboardRemove()
+            )
             await state.set_state("next_step1")
 
     else:
