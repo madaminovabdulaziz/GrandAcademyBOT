@@ -47,8 +47,30 @@ async def bot_start(message: Message, state: FSMContext):
             channel = await bot.get_chat(channel)
 
             if status:
-                await message.answer("🏡 Bosh menyu", reply_markup=main_menu)
-                await Main.main_menu.set()
+                payload = message.get_args()
+                if payload.startswith("class_"):
+                    class_name = payload.split('_')[1]
+                    test_id = payload.split('_')[2]
+                    test_len = await db.get_test_length(test_id)
+                    text = f"""
+✅ Test boshlandi.
+
+📔 Sinf: {class_name}
+🔑 Test kodi: {test_id}
+📝 Savollar soni: {test_len}
+
+Javobingizni quyidagi ko'rinishda yuborishingiz mumkin:
+{test_id}*abcdabcd...
+yoki
+{test_id}*1a2b3c4d5a...
+
+            """
+                    await message.answer(text, reply_markup=ReplyKeyboardRemove())
+                    await state.set_state("next_step1")
+                else:
+                    await message.answer("🏡 Bosh menyu", reply_markup=main_menu)
+                    await Main.main_menu.set()
+               
             else:
                 is_User = await db.select_user(message.from_user.id)
                 if is_User is None:
