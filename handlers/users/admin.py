@@ -14,21 +14,24 @@ admin_btn = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
 admin_btn.add("Block test qo'shish")
 admin_btn.add("Test bo'yicha reytingni ko'rish")
 admin_btn.add("Foydalanuvchilar sonini ko'rish")
+admin_btn.add("Sinfli test qo'shish")
 admin_btn.add("🔙 Orqaga")
-
 
 user_types_btn = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
 user_types_btn.add("PM o'quvchilariga")
 user_types_btn.add("Abiturientlarga")
 user_types_btn.add("🔙 Orqaga")
 
-this_btn = ["Block test qo'shish", "Test bo'yicha reytingni ko'rish", "🔙 Orqaga", "Foydalanuvchilar sonini ko'rish", "Foydalanuvchilarni ko'rish"]
+this_btn = ["Block test qo'shish", "Test bo'yicha reytingni ko'rish", "🔙 Orqaga", "Foydalanuvchilar sonini ko'rish",
+            "Sinfli test qo'shish"]
 this_btn_2 = ["PM o'quvchilariga", "Abiturientlarga", "🔙 Orqaga"]
+
 
 @dp.message_handler(text="/admin", chat_id=ADMINS, state="*")
 async def show_details(message: Message, state: FSMContext):
     await message.answer("😊 Admin panelga xush kelibsiz!", reply_markup=admin_btn)
     await state.set_state("first_step")
+
 
 @dp.message_handler(text=this_btn, chat_id=ADMINS, state="first_step")
 async def make_d(message: Message, state: FSMContext):
@@ -47,9 +50,10 @@ async def make_d(message: Message, state: FSMContext):
 Ayni payt botdan {users} kishi ro'yxatdan o'tgan
 
 """)
+    elif message.text == this_btn[4]:
+        await message.answer("Sinfni kiriting:\n\nMisol: 7, 8, 9, 10, 11")
+        await state.set_state("get_class")
 
-    await message.answer("🏡 Bosh menyu", reply_markup=main_menu)
-    await Main.main_menu.set()
 
 
 
@@ -66,7 +70,6 @@ async def add_test_sp(message: Message, state: FSMContext):
     elif message.text == this_btn_2[2]:
         await message.answer("🏡 Bosh menyu", reply_markup=main_menu)
         await Main.main_menu.set()
-
 
 
 @dp.message_handler(state="getPMQuestions")
@@ -98,7 +101,6 @@ async def addPMQ(message: Message, state: FSMContext):
             return
 
 
-
 @dp.message_handler(state="getABQuestions")
 async def addPMQ(message: Message, state: FSMContext):
     test_id = random.randint(0, 999999)
@@ -128,7 +130,6 @@ async def addPMQ(message: Message, state: FSMContext):
             return
 
 
-
 @dp.message_handler(state="defineID")
 async def define_them(message: Message, state: FSMContext):
     test_id = message.text
@@ -147,16 +148,18 @@ async def define_them(message: Message, state: FSMContext):
             await message.answer("🏡 Bosh menyu", reply_markup=main_menu)
             await Main.main_menu.set()
         else:
-            await message.answer("Siz kiritgan ID bo'yicha test topilmadi!\nQayta kiriting!", reply_markup=ReplyKeyboardRemove())
+            await message.answer("Siz kiritgan ID bo'yicha test topilmadi!\nQayta kiriting!",
+                                 reply_markup=ReplyKeyboardRemove())
             return
     else:
         await message.answer("TEST ID xato kiritilgan!\n Iltimos, qayta kiriting!", reply_markup=ReplyKeyboardRemove())
         return
-    
+
+
 @dp.message_handler(text="/deleteuser", chat_id=ADMINS, state="*")
 async def deleteUserDB(message: Message, state: FSMContext):
-        await message.answer("UserID kiriting:")
-        await state.set_state("getUID")
+    await message.answer("UserID kiriting:")
+    await state.set_state("getUID")
 
 
 @dp.message_handler(state="getUID")
@@ -170,3 +173,70 @@ async def aha(message: Message, state: FSMContext):
     else:
         await message.answer("Iltimos, qayta kiriting!")
         return
+
+
+
+
+
+
+@dp.message_handler(state="get_class")
+async def get_class(message: Message, state: FSMContext):
+    sinf = message.text
+    home_btn = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+    home_btn.add("🏡 Bosh menyu")
+    if sinf.isdigit():
+        sinf = int(sinf)
+        if 1 <= sinf < 12:
+            await state.update_data(
+                {"class": sinf}
+            )
+            await message.answer(qoshish_yoriqnomasi(), reply_markup=home_btn)
+            await state.set_state("second_sec")
+        else:
+            await message.answer("Sinflar faqat 1-11 gacha!\n\nQayta kirting!")
+            return
+
+    else:
+        await message.answer("Sinf kiritishda xatolik!\n\nQayta kiriting!\n\nMisol: 7, 8, 9")
+        return
+
+
+
+
+@dp.message_handler(state="second_sec")
+async def sstep(message: Message, state: FSMContext):
+    test_id = random.randint(0, 999999)
+    full_test = message.text
+    if full_test == "🏡 Bosh menyu":
+        await message.answer("🏡 Bosh menyu", reply_markup=main_menu)
+        await Main.main_menu.set()
+    else:
+        if "*" in full_test:
+            where_is_star = full_test.find("*")
+            where_is_star = int(where_is_star)
+            where_is_star += 1
+
+            answers = full_test[where_is_star:]
+            if answers.isdigit():
+                await message.answer(qoshish_yoriqnomasi(), reply_markup=ReplyKeyboardRemove())
+                return
+            else:
+                pass
+
+            where_is_star -= 1
+            subject = full_test[:where_is_star]
+            user_answers = re.sub('[^a-zA-Z]+', '', answers)
+            user_answers = user_answers.lower()
+            length = len(user_answers)
+            await db.add_test(subject, test_id, user_answers, length, message.from_user.id, "usual")
+            await message.answer(bazaga_qoshildi(test_id, user_answers))
+            data = await state.get_data()
+            sinf = data.get("class")
+            link = f"https://t.me/grandacademybot?start=class_{sinf}_{test_id}"
+            await message.answer(f"Bu test uchun link:\n\n{link}", disable_web_page_preview=True)
+            await message.answer("🏡 Bosh menyu", reply_markup=main_menu)
+            await Main.main_menu.set()
+
+        else:
+            await message.answer(qoshish_yoriqnomasi(), reply_markup=ReplyKeyboardRemove())
+            await state.set_state("second")
