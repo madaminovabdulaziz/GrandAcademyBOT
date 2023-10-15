@@ -18,7 +18,7 @@ role_mrkp.add("Abiturient")
 role_mrkp.add("Bulardan hech biri emas")
 
 roles_list = ["Prezident maktab o'quvchisi", "Abiturient", "Bulardan hech biri emas"]
-
+print("HEY!")
 
 @dp.message_handler(CommandStart(), state="*")
 async def bot_start(message: Message, state: FSMContext):
